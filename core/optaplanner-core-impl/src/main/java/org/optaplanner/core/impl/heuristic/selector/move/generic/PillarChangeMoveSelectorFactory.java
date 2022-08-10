@@ -34,7 +34,8 @@ public class PillarChangeMoveSelectorFactory<Solution_>
                         : Collections.singletonList(config.getValueSelectorConfig().getVariableName());
         PillarSelector<Solution_> pillarSelector = PillarSelectorFactory.<Solution_> create(pillarSelectorConfig_)
                 .buildPillarSelector(configPolicy, config.getSubPillarType(), config.getSubPillarSequenceComparatorClass(),
-                        minimumCacheType, SelectionOrder.fromRandomSelectionBoolean(randomSelection), variableNameIncludeList);
+                        minimumCacheType, SelectionOrder.fromRandomSelectionBoolean(randomSelection), variableNameIncludeList,
+                        config.getSubPillarFilterPredicateClass());
         ValueSelectorConfig valueSelectorConfig_ = Objects.requireNonNullElse(config.getValueSelectorConfig(),
                 new ValueSelectorConfig());
         SelectionOrder selectionOrder = SelectionOrder.fromRandomSelectionBoolean(randomSelection);

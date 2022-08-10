@@ -46,7 +46,7 @@ public class PillarSwapMoveSelectorFactory<Solution_>
                 .buildPillarSelector(configPolicy, config.getSubPillarType(),
                         config.getSubPillarSequenceComparatorClass(), minimumCacheType,
                         SelectionOrder.fromRandomSelectionBoolean(randomSelection),
-                        config.getVariableNameIncludeList());
+                        config.getVariableNameIncludeList(), config.getSubPillarFilterPredicateClass());
     }
 
 }

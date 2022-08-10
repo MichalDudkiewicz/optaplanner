@@ -19,5 +19,7 @@ public enum SubPillarType {
     /**
      * Pillars may also be affected partially, the resulting subpillar returned in random order.
      */
-    ALL;
+    ALL,
+
+    FILTERED;
 }

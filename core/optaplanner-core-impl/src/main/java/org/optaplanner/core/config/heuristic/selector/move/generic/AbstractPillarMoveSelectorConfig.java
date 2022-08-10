@@ -2,6 +2,7 @@ package org.optaplanner.core.config.heuristic.selector.move.generic;
 
 import java.util.Comparator;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
@@ -13,6 +14,7 @@ import org.optaplanner.core.config.util.ConfigUtils;
 @XmlType(propOrder = {
         "subPillarType",
         "subPillarSequenceComparatorClass",
+        "subPillarFilterPredicateClass",
         "pillarSelectorConfig"
 })
 public abstract class AbstractPillarMoveSelectorConfig<Config_ extends AbstractPillarMoveSelectorConfig<Config_>>
@@ -20,6 +22,7 @@ public abstract class AbstractPillarMoveSelectorConfig<Config_ extends AbstractP
 
     protected SubPillarType subPillarType = null;
     protected Class<? extends Comparator> subPillarSequenceComparatorClass = null;
+    protected Class<? extends Predicate> subPillarFilterPredicateClass = null;
     @XmlElement(name = "pillarSelector")
     protected PillarSelectorConfig pillarSelectorConfig = null;
 
@@ -35,8 +38,16 @@ public abstract class AbstractPillarMoveSelectorConfig<Config_ extends AbstractP
         return subPillarSequenceComparatorClass;
     }
 
+    public Class<? extends Predicate> getSubPillarFilterPredicateClass() {
+        return subPillarFilterPredicateClass;
+    }
+
     public void setSubPillarSequenceComparatorClass(final Class<? extends Comparator> subPillarSequenceComparatorClass) {
         this.subPillarSequenceComparatorClass = subPillarSequenceComparatorClass;
+    }
+
+    public void setSubPillarFilterPredicateClass(final Class<? extends Predicate> subPillarFilterPredicateClass) {
+        this.subPillarFilterPredicateClass = subPillarFilterPredicateClass;
     }
 
     public PillarSelectorConfig getPillarSelectorConfig() {
@@ -53,6 +64,8 @@ public abstract class AbstractPillarMoveSelectorConfig<Config_ extends AbstractP
         subPillarType = ConfigUtils.inheritOverwritableProperty(subPillarType, inheritedConfig.getSubPillarType());
         subPillarSequenceComparatorClass = ConfigUtils.inheritOverwritableProperty(subPillarSequenceComparatorClass,
                 inheritedConfig.getSubPillarSequenceComparatorClass());
+        subPillarFilterPredicateClass = ConfigUtils.inheritOverwritableProperty(subPillarFilterPredicateClass,
+                inheritedConfig.getSubPillarFilterPredicateClass());
         pillarSelectorConfig = ConfigUtils.inheritConfig(pillarSelectorConfig, inheritedConfig.getPillarSelectorConfig());
         return (Config_) this;
     }
@@ -61,6 +74,7 @@ public abstract class AbstractPillarMoveSelectorConfig<Config_ extends AbstractP
     protected void visitCommonReferencedClasses(Consumer<Class<?>> classVisitor) {
         super.visitCommonReferencedClasses(classVisitor);
         classVisitor.accept(subPillarSequenceComparatorClass);
+        classVisitor.accept(subPillarFilterPredicateClass);
         if (pillarSelectorConfig != null) {
             pillarSelectorConfig.visitReferencedClasses(classVisitor);
         }

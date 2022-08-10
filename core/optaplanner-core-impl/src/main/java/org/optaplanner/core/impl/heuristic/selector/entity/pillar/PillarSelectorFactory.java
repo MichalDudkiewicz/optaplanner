@@ -3,6 +3,7 @@ package org.optaplanner.core.impl.heuristic.selector.entity.pillar;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 import org.optaplanner.core.config.heuristic.selector.common.SelectionCacheType;
 import org.optaplanner.core.config.heuristic.selector.common.SelectionOrder;
@@ -42,11 +43,16 @@ public class PillarSelectorFactory<Solution_>
     public PillarSelector<Solution_> buildPillarSelector(HeuristicConfigPolicy<Solution_> configPolicy,
             SubPillarType subPillarType, Class<? extends Comparator> subPillarSequenceComparatorClass,
             SelectionCacheType minimumCacheType, SelectionOrder inheritedSelectionOrder,
-            List<String> variableNameIncludeList) {
+            List<String> variableNameIncludeList, Class<? extends Predicate> subPillarFilterPredicateClass) {
         if (subPillarType != SubPillarType.SEQUENCE && subPillarSequenceComparatorClass != null) {
             throw new IllegalArgumentException("Subpillar type (" + subPillarType + ") on pillarSelectorConfig (" + config +
                     ") is not " + SubPillarType.SEQUENCE + ", yet subPillarSequenceComparatorClass (" +
                     subPillarSequenceComparatorClass + ") is provided.");
+        }
+        if (subPillarType != SubPillarType.FILTERED && subPillarFilterPredicateClass != null) {
+            throw new IllegalArgumentException("Subpillar type (" + subPillarType + ") on pillarSelectorConfig (" + config +
+                    ") is not " + SubPillarType.FILTERED + ", yet subPillarFilterPredicateClass (" +
+                    subPillarFilterPredicateClass + ") is provided.");
         }
         if (minimumCacheType.compareTo(SelectionCacheType.STEP) > 0) {
             throw new IllegalArgumentException("The pillarSelectorConfig (" + config
@@ -72,7 +78,7 @@ public class PillarSelectorFactory<Solution_>
 
         SubPillarConfigPolicy subPillarPolicy = subPillarEnabled
                 ? configureSubPillars(subPillarType, subPillarSequenceComparatorClass, entitySelector,
-                        config.getMinimumSubPillarSize(), config.getMaximumSubPillarSize())
+                        config.getMinimumSubPillarSize(), config.getMaximumSubPillarSize(), subPillarFilterPredicateClass)
                 : SubPillarConfigPolicy.withoutSubpillars();
         return new DefaultPillarSelector<>(entitySelector, variableDescriptors,
                 inheritedSelectionOrder.toRandomSelectionBoolean(), subPillarPolicy);
@@ -80,7 +86,7 @@ public class PillarSelectorFactory<Solution_>
 
     private SubPillarConfigPolicy configureSubPillars(SubPillarType pillarType,
             Class<? extends Comparator> pillarOrderComparatorClass, EntitySelector<Solution_> entitySelector,
-            Integer minimumSubPillarSize, Integer maximumSubPillarSize) {
+            Integer minimumSubPillarSize, Integer maximumSubPillarSize, Class<? extends Predicate> pillarFilterPredicateClass) {
         int actualMinimumSubPillarSize = Objects.requireNonNullElse(minimumSubPillarSize, 1);
         int actualMaximumSubPillarSize = Objects.requireNonNullElse(maximumSubPillarSize, Integer.MAX_VALUE);
         if (pillarType == null) { // for backwards compatibility reasons
@@ -106,6 +112,15 @@ public class PillarSelectorFactory<Solution_>
                             pillarOrderComparatorClass);
                     return SubPillarConfigPolicy.sequential(actualMinimumSubPillarSize, actualMaximumSubPillarSize,
                             comparator);
+                }
+            case FILTERED:
+                if (pillarFilterPredicateClass == null) {
+                    throw new IllegalStateException("Filtered without filtering predicate is not allowed.");
+                } else {
+                    Predicate<Object> predicate = ConfigUtils.newInstance(config, "pillarFilterPredicateClass",
+                            pillarFilterPredicateClass);
+                    return SubPillarConfigPolicy.filtered(actualMinimumSubPillarSize, actualMaximumSubPillarSize,
+                            predicate);
                 }
             default:
                 throw new IllegalStateException("Subpillars cannot be enabled and disabled at the same time.");

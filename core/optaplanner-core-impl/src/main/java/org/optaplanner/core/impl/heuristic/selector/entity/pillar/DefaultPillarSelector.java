@@ -9,6 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -125,6 +126,10 @@ public class DefaultPillarSelector<Solution_> extends AbstractSelector<Solution_
              * sort them individually later.
              */
             entities = entities.sorted((Comparator<? super Object>) comparator);
+        }
+        Predicate<?> predicate = subpillarConfigPolicy.getEntityPredicate();
+        if (predicate != null) {
+            entities = entities.filter((Predicate<? super Object>) predicate);
         }
         // Create all the pillars from a stream of entities; if sorted, the pillars will be sequential.
         Map<List<Object>, List<Object>> valueStateToPillarMap = new LinkedHashMap<>((int) entitySize);

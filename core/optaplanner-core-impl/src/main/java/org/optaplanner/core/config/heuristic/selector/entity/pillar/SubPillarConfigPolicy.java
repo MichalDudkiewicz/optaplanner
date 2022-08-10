@@ -1,6 +1,7 @@
 package org.optaplanner.core.config.heuristic.selector.entity.pillar;
 
 import java.util.Comparator;
+import java.util.function.Predicate;
 
 import javax.xml.bind.annotation.XmlType;
 
@@ -17,12 +18,15 @@ public final class SubPillarConfigPolicy {
     private final int maximumSubPillarSize;
     private final Comparator<?> entityComparator;
 
+    private final Predicate<?> entityPredicate;
+
     private SubPillarConfigPolicy(int minimumSubPillarSize, int maximumSubPillarSize) {
         this.subPillarEnabled = true;
         this.minimumSubPillarSize = minimumSubPillarSize;
         this.maximumSubPillarSize = maximumSubPillarSize;
         validateSizes();
         this.entityComparator = null;
+        this.entityPredicate = null;
     }
 
     private SubPillarConfigPolicy(int minimumSubPillarSize, int maximumSubPillarSize, Comparator<?> entityComparator) {
@@ -34,6 +38,7 @@ public final class SubPillarConfigPolicy {
             throw new IllegalStateException("The entityComparator must not be null.");
         }
         this.entityComparator = entityComparator;
+        this.entityPredicate = null;
     }
 
     private SubPillarConfigPolicy() {
@@ -41,6 +46,19 @@ public final class SubPillarConfigPolicy {
         this.minimumSubPillarSize = -1;
         this.maximumSubPillarSize = -1;
         this.entityComparator = null;
+        this.entityPredicate = null;
+    }
+
+    private SubPillarConfigPolicy(int minimumSubPillarSize, int maximumSubPillarSize, Predicate<?> entityPredicate) {
+        this.subPillarEnabled = true;
+        this.minimumSubPillarSize = minimumSubPillarSize;
+        this.maximumSubPillarSize = maximumSubPillarSize;
+        validateSizes();
+        if (entityPredicate == null) {
+            throw new IllegalStateException("The entityPredicate must not be null.");
+        }
+        this.entityComparator = null;
+        this.entityPredicate = entityPredicate;
     }
 
     public static SubPillarConfigPolicy withoutSubpillars() {
@@ -61,6 +79,10 @@ public final class SubPillarConfigPolicy {
 
     public static SubPillarConfigPolicy sequentialUnlimited(Comparator<?> entityComparator) {
         return sequential(1, Integer.MAX_VALUE, entityComparator);
+    }
+
+    public static SubPillarConfigPolicy filtered(int minSize, int maxSize, Predicate<?> entityPredicate) {
+        return new SubPillarConfigPolicy(minSize, maxSize, entityPredicate);
     }
 
     private void validateSizes() {
@@ -97,6 +119,10 @@ public final class SubPillarConfigPolicy {
      */
     public Comparator<?> getEntityComparator() {
         return entityComparator;
+    }
+
+    public Predicate<?> getEntityPredicate() {
+        return entityPredicate;
     }
 
 }
