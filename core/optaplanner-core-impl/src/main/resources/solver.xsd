@@ -50,6 +50,8 @@
             <xs:element name="localSearch" type="tns:localSearchPhaseConfig"/>
 
             <xs:element name="ruin" type="tns:ruinPhaseConfig"/>
+
+            <xs:element name="loop" type="tns:loopPhaseConfig"/>
                         
             <xs:element name="noChangePhase" type="tns:noChangePhaseConfig"/>
                         
@@ -1353,6 +1355,42 @@
 
             <xs:element minOccurs="0" maxOccurs="1" name="ruinMoveSelector" type="tns:ruinMoveSelectorConfig"/>
 
+        </xs:sequence>
+
+      </xs:extension>
+
+    </xs:complexContent>
+
+  </xs:complexType>
+
+  <xs:complexType name="loopPhaseConfig">
+
+    <xs:complexContent>
+
+      <xs:extension base="tns:phaseConfig">
+
+        <xs:sequence>
+          <xs:element minOccurs="0" name="count" type="xs:int"/>
+
+          <xs:choice maxOccurs="unbounded" minOccurs="0">
+
+            <xs:element name="constructionHeuristic" type="tns:constructionHeuristicPhaseConfig"/>
+
+            <xs:element name="customPhase" type="tns:customPhaseConfig"/>
+
+            <xs:element name="exhaustiveSearch" type="tns:exhaustiveSearchPhaseConfig"/>
+
+            <xs:element name="localSearch" type="tns:localSearchPhaseConfig"/>
+
+            <xs:element name="ruin" type="tns:ruinPhaseConfig"/>
+
+            <xs:element name="loop" type="tns:loopPhaseConfig"/>
+
+            <xs:element name="noChangePhase" type="tns:noChangePhaseConfig"/>
+
+            <xs:element name="partitionedSearch" type="tns:partitionedSearchPhaseConfig"/>
+
+          </xs:choice>
         </xs:sequence>
 
       </xs:extension>

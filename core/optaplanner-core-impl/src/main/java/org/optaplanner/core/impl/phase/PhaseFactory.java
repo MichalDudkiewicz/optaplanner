@@ -7,6 +7,7 @@ import org.optaplanner.core.config.constructionheuristic.ConstructionHeuristicPh
 import org.optaplanner.core.config.exhaustivesearch.ExhaustiveSearchPhaseConfig;
 import org.optaplanner.core.config.localsearch.LocalSearchPhaseConfig;
 import org.optaplanner.core.config.partitionedsearch.PartitionedSearchPhaseConfig;
+import org.optaplanner.core.config.phase.LoopPhaseConfig;
 import org.optaplanner.core.config.phase.NoChangePhaseConfig;
 import org.optaplanner.core.config.phase.PhaseConfig;
 import org.optaplanner.core.config.phase.custom.CustomPhaseConfig;
@@ -37,9 +38,10 @@ public interface PhaseFactory<Solution_> {
             return new DefaultExhaustiveSearchPhaseFactory<>((ExhaustiveSearchPhaseConfig) phaseConfig);
         } else if (NoChangePhaseConfig.class.isAssignableFrom(phaseConfig.getClass())) {
             return new NoChangePhaseFactory<>((NoChangePhaseConfig) phaseConfig);
-        }
-        if (RuinPhaseConfig.class.isAssignableFrom(phaseConfig.getClass())) {
+        } if (RuinPhaseConfig.class.isAssignableFrom(phaseConfig.getClass())) {
             return new RuinPhaseFactory<>((RuinPhaseConfig) phaseConfig);
+        } if (LoopPhaseConfig.class.isAssignableFrom(phaseConfig.getClass())) {
+            return new LoopPhaseFactory<>((LoopPhaseConfig) phaseConfig);
         } else {
             throw new IllegalArgumentException(String.format("Unknown %s type: (%s).",
                     PhaseConfig.class.getSimpleName(), phaseConfig.getClass().getName()));
@@ -61,7 +63,7 @@ public interface PhaseFactory<Solution_> {
                 }
             }
             PhaseFactory<Solution_> phaseFactory = PhaseFactory.create(phaseConfig);
-            Phase<Solution_> phase = phaseFactory.buildPhase(phaseIndex, configPolicy, bestSolutionRecaller, termination);
+            Phase<Solution_> phase = phaseFactory.buildPhase(String.valueOf(phaseIndex), configPolicy, bestSolutionRecaller, termination);
             phaseList.add(phase);
         }
         return phaseList;
@@ -77,6 +79,6 @@ public interface PhaseFactory<Solution_> {
         return (terminationConfig != null && terminationConfig.isConfigured());
     }
 
-    Phase<Solution_> buildPhase(int phaseIndex, HeuristicConfigPolicy<Solution_> solverConfigPolicy,
+    Phase<Solution_> buildPhase(String phaseIndex, HeuristicConfigPolicy<Solution_> solverConfigPolicy,
             BestSolutionRecaller<Solution_> bestSolutionRecaller, Termination<Solution_> solverTermination);
 }

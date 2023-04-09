@@ -16,89 +16,86 @@
     <initializingScoreTrend>ONLY_DOWN</initializingScoreTrend>
   </scoreDirectorFactory>
 
-  <constructionHeuristic>
-    <constructionHeuristicType>FIRST_FIT_DECREASING</constructionHeuristicType>
-  </constructionHeuristic>
-  <localSearch>
-    <termination>
-      <unimprovedSecondsSpentLimit>5</unimprovedSecondsSpentLimit>
-    </termination>
-    <unionMoveSelector>
-      <changeMoveSelector>
-        <cacheType>STEP</cacheType>
-        <selectionOrder>SHUFFLED</selectionOrder>
-      </changeMoveSelector>
-      <changeMoveSelector>
-        <entitySelector id="entitySelector1"/>
-        <valueSelector>
-          <nearbySelection>
-            <originEntitySelector mimicSelectorRef="entitySelector1"/>
-            <nearbyDistanceMeterClass>org.optaplanner.examples.tsp.domain.solver.nearby.VisitNearbyDistanceMeter</nearbyDistanceMeterClass>
-            <parabolicDistributionSizeMaximum>40</parabolicDistributionSizeMaximum>
-          </nearbySelection>
-        </valueSelector>
-      </changeMoveSelector>
-      <swapMoveSelector>
-        <entitySelector id="entitySelector2"/>
+  <loop>
+    <count>100</count>
+
+
+    <constructionHeuristic>
+      <constructionHeuristicType>FIRST_FIT_DECREASING</constructionHeuristicType>
+    </constructionHeuristic>
+
+    <localSearch>
+      <termination>
+        <unimprovedSecondsSpentLimit>5</unimprovedSecondsSpentLimit>
+      </termination>
+      <unionMoveSelector>
+        <changeMoveSelector>
+          <cacheType>STEP</cacheType>
+          <selectionOrder>SHUFFLED</selectionOrder>
+        </changeMoveSelector>
+        <changeMoveSelector>
+          <entitySelector id="entitySelector1"/>
+          <valueSelector>
+            <nearbySelection>
+              <originEntitySelector mimicSelectorRef="entitySelector1"/>
+              <nearbyDistanceMeterClass>org.optaplanner.examples.tsp.domain.solver.nearby.VisitNearbyDistanceMeter</nearbyDistanceMeterClass>
+              <parabolicDistributionSizeMaximum>40</parabolicDistributionSizeMaximum>
+            </nearbySelection>
+          </valueSelector>
+        </changeMoveSelector>
+        <swapMoveSelector>
+          <entitySelector id="entitySelector2"/>
+          <secondaryEntitySelector>
+            <nearbySelection>
+              <originEntitySelector mimicSelectorRef="entitySelector2"/>
+              <nearbyDistanceMeterClass>org.optaplanner.examples.tsp.domain.solver.nearby.VisitNearbyDistanceMeter</nearbyDistanceMeterClass>
+              <parabolicDistributionSizeMaximum>40</parabolicDistributionSizeMaximum>
+            </nearbySelection>
+          </secondaryEntitySelector>
+        </swapMoveSelector>
+        <tailChainSwapMoveSelector>
+          <entitySelector id="entitySelector3"/>
+          <valueSelector>
+            <nearbySelection>
+              <originEntitySelector mimicSelectorRef="entitySelector3"/>
+              <nearbyDistanceMeterClass>org.optaplanner.examples.tsp.domain.solver.nearby.VisitNearbyDistanceMeter</nearbyDistanceMeterClass>
+              <parabolicDistributionSizeMaximum>40</parabolicDistributionSizeMaximum>
+            </nearbySelection>
+          </valueSelector>
+        </tailChainSwapMoveSelector>
+        <subChainChangeMoveSelector>
+          <subChainSelector>
+            <maximumSubChainSize>50</maximumSubChainSize>
+          </subChainSelector>
+          <selectReversingMoveToo>true</selectReversingMoveToo>
+        </subChainChangeMoveSelector>
+        <subChainSwapMoveSelector>
+          <subChainSelector>
+            <maximumSubChainSize>50</maximumSubChainSize>
+          </subChainSelector>
+          <selectReversingMoveToo>true</selectReversingMoveToo>
+        </subChainSwapMoveSelector>
+      </unionMoveSelector>
+      <acceptor>
+        <lateAcceptanceSize>400</lateAcceptanceSize>
+      </acceptor>
+      <forager>
+        <acceptedCountLimit>1</acceptedCountLimit>
+      </forager>
+    </localSearch>
+
+    <ruin>
+      <ruinMoveSelector>
+        <percentageToRuin>15</percentageToRuin>
+        <entitySelector id="entitySelector4"/>
         <secondaryEntitySelector>
           <nearbySelection>
-            <originEntitySelector mimicSelectorRef="entitySelector2"/>
+            <originEntitySelector mimicSelectorRef="entitySelector4"/>
             <nearbyDistanceMeterClass>org.optaplanner.examples.tsp.domain.solver.nearby.VisitNearbyDistanceMeter</nearbyDistanceMeterClass>
-            <parabolicDistributionSizeMaximum>40</parabolicDistributionSizeMaximum>
           </nearbySelection>
         </secondaryEntitySelector>
-      </swapMoveSelector>
-      <tailChainSwapMoveSelector>
-        <entitySelector id="entitySelector3"/>
-        <valueSelector>
-          <nearbySelection>
-            <originEntitySelector mimicSelectorRef="entitySelector3"/>
-            <nearbyDistanceMeterClass>org.optaplanner.examples.tsp.domain.solver.nearby.VisitNearbyDistanceMeter</nearbyDistanceMeterClass>
-            <parabolicDistributionSizeMaximum>40</parabolicDistributionSizeMaximum>
-          </nearbySelection>
-        </valueSelector>
-      </tailChainSwapMoveSelector>
-      <subChainChangeMoveSelector>
-        <subChainSelector>
-          <maximumSubChainSize>50</maximumSubChainSize>
-        </subChainSelector>
-        <selectReversingMoveToo>true</selectReversingMoveToo>
-      </subChainChangeMoveSelector>
-      <subChainSwapMoveSelector>
-        <subChainSelector>
-          <maximumSubChainSize>50</maximumSubChainSize>
-        </subChainSelector>
-        <selectReversingMoveToo>true</selectReversingMoveToo>
-      </subChainSwapMoveSelector>
-    </unionMoveSelector>
-    <acceptor>
-      <lateAcceptanceSize>400</lateAcceptanceSize>
-    </acceptor>
-    <forager>
-      <acceptedCountLimit>1</acceptedCountLimit>
-    </forager>
-  </localSearch>
+      </ruinMoveSelector>
+    </ruin>
+  </loop>
 
-  <ruin>
-    <ruinMoveSelector>
-      <percentageToRuin>15</percentageToRuin>
-      <entitySelector id="entitySelector4"/>
-      <secondaryEntitySelector>
-        <nearbySelection>
-          <originEntitySelector mimicSelectorRef="entitySelector4"/>
-          <nearbyDistanceMeterClass>org.optaplanner.examples.tsp.domain.solver.nearby.VisitNearbyDistanceMeter</nearbyDistanceMeterClass>
-        </nearbySelection>
-      </secondaryEntitySelector>
-    </ruinMoveSelector>
-  </ruin>
-
-  <constructionHeuristic/>
-
-  <localSearch>
-    <termination>
-      <secondsSpentLimit>
-        1
-      </secondsSpentLimit>
-    </termination>
-  </localSearch>
 </solver>

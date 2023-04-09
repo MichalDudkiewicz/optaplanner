@@ -103,7 +103,7 @@ public class DefaultCustomPhase<Solution_> extends AbstractPhase<Solution_> impl
 
         private final List<CustomPhaseCommand<Solution_>> customPhaseCommandList;
 
-        public Builder(int phaseIndex, String logIndentation, Termination<Solution_> phaseTermination,
+        public Builder(String phaseIndex, String logIndentation, Termination<Solution_> phaseTermination,
                 List<CustomPhaseCommand<Solution_>> customPhaseCommandList) {
             super(phaseIndex, logIndentation, phaseTermination);
             this.customPhaseCommandList = List.copyOf(customPhaseCommandList);

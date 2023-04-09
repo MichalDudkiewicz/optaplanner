@@ -26,7 +26,7 @@ public abstract class AbstractPhase<Solution_> implements Phase<Solution_> {
 
     protected final transient Logger logger = LoggerFactory.getLogger(getClass());
 
-    protected final int phaseIndex;
+    protected String phaseIndex;
     protected final String logIndentation;
 
     // Called "phaseTermination" to clearly distinguish from "solverTermination" inside AbstractSolver.
@@ -50,8 +50,12 @@ public abstract class AbstractPhase<Solution_> implements Phase<Solution_> {
         assertShadowVariablesAreNotStaleAfterStep = builder.assertShadowVariablesAreNotStaleAfterStep;
     }
 
-    public int getPhaseIndex() {
+    public String getPhaseIndex() {
         return phaseIndex;
+    }
+
+    public void setPhaseIndex(String phaseIndex) {
+        this.phaseIndex = phaseIndex;
     }
 
     public Termination<Solution_> getPhaseTermination() {
@@ -210,7 +214,7 @@ public abstract class AbstractPhase<Solution_> implements Phase<Solution_> {
 
     protected abstract static class Builder<Solution_> {
 
-        private final int phaseIndex;
+        private final String phaseIndex;
         private final String logIndentation;
         private final Termination<Solution_> phaseTermination;
 
@@ -218,7 +222,7 @@ public abstract class AbstractPhase<Solution_> implements Phase<Solution_> {
         private boolean assertExpectedStepScore = false;
         private boolean assertShadowVariablesAreNotStaleAfterStep = false;
 
-        protected Builder(int phaseIndex, String logIndentation, Termination<Solution_> phaseTermination) {
+        protected Builder(String phaseIndex, String logIndentation, Termination<Solution_> phaseTermination) {
             this.phaseIndex = phaseIndex;
             this.logIndentation = logIndentation;
             this.phaseTermination = phaseTermination;

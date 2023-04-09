@@ -222,7 +222,7 @@ public class DefaultLocalSearchPhase<Solution_> extends AbstractPhase<Solution_>
 
         private final LocalSearchDecider<Solution_> decider;
 
-        public Builder(int phaseIndex, String logIndentation, Termination<Solution_> phaseTermination,
+        public Builder(String phaseIndex, String logIndentation, Termination<Solution_> phaseTermination,
                 LocalSearchDecider<Solution_> decider) {
             super(phaseIndex, logIndentation, phaseTermination);
             this.decider = decider;

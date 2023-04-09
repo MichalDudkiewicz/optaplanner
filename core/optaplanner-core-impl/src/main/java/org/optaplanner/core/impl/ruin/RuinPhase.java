@@ -115,7 +115,7 @@ public class RuinPhase<Solution_> extends AbstractPhase<Solution_> implements Cu
 
         private final RuinPhaseCommand<Solution_> ruinPhaseCommand;
 
-        public Builder(int phaseIndex, String logIndentation, Termination<Solution_> phaseTermination,
+        public Builder(String phaseIndex, String logIndentation, Termination<Solution_> phaseTermination,
                 RuinPhaseCommand<Solution_> ruinPhaseCommand) {
             super(phaseIndex, logIndentation, phaseTermination);
             this.ruinPhaseCommand = ruinPhaseCommand;

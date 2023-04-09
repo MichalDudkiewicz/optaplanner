@@ -35,6 +35,7 @@ import org.optaplanner.core.config.constructionheuristic.ConstructionHeuristicPh
 import org.optaplanner.core.config.exhaustivesearch.ExhaustiveSearchPhaseConfig;
 import org.optaplanner.core.config.localsearch.LocalSearchPhaseConfig;
 import org.optaplanner.core.config.partitionedsearch.PartitionedSearchPhaseConfig;
+import org.optaplanner.core.config.phase.LoopPhaseConfig;
 import org.optaplanner.core.config.phase.NoChangePhaseConfig;
 import org.optaplanner.core.config.phase.PhaseConfig;
 import org.optaplanner.core.config.phase.custom.CustomPhaseConfig;
@@ -247,6 +248,7 @@ public class SolverConfig extends AbstractConfig<SolverConfig> {
             @XmlElement(name = ExhaustiveSearchPhaseConfig.XML_ELEMENT_NAME, type = ExhaustiveSearchPhaseConfig.class),
             @XmlElement(name = LocalSearchPhaseConfig.XML_ELEMENT_NAME, type = LocalSearchPhaseConfig.class),
             @XmlElement(name = RuinPhaseConfig.XML_ELEMENT_NAME, type = RuinPhaseConfig.class),
+            @XmlElement(name = LoopPhaseConfig.XML_ELEMENT_NAME, type = LoopPhaseConfig.class),
             @XmlElement(name = NoChangePhaseConfig.XML_ELEMENT_NAME, type = NoChangePhaseConfig.class),
             @XmlElement(name = PartitionedSearchPhaseConfig.XML_ELEMENT_NAME, type = PartitionedSearchPhaseConfig.class)
     })

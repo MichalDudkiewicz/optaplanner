@@ -213,7 +213,7 @@ public class DefaultPartitionedSearchPhase<Solution_> extends AbstractPhase<Solu
         private final List<PhaseConfig> phaseConfigList;
         private final HeuristicConfigPolicy<Solution_> configPolicy;
 
-        public Builder(int phaseIndex, String logIndentation, Termination<Solution_> phaseTermination,
+        public Builder(String phaseIndex, String logIndentation, Termination<Solution_> phaseTermination,
                 SolutionPartitioner<Solution_> solutionPartitioner, ThreadFactory threadFactory,
                 Integer runnablePartThreadLimit, List<PhaseConfig> phaseConfigList,
                 HeuristicConfigPolicy<Solution_> configPolicy) {
